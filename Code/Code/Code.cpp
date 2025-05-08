@@ -392,6 +392,8 @@ public:
 			buildings.push_back(b);
 			setColor(10);
 			cout << "Residential Building Added!" << endl;
+			population+=200;
+			Budget-=100;
 			setColor(7);
 			break;
 		}
@@ -415,6 +417,9 @@ public:
 			buildings.push_back(b);
 			setColor(10);
 			cout << "Commercial Building Added!" << endl;
+			population-=200;
+			ecoscore-=4;
+			Budget-=100;
 			setColor(7);
 			break;
 		}
@@ -444,6 +449,9 @@ public:
 			buildings.push_back(b);
 			setColor(10);
 			cout << "Industrial Building Added!" << endl;
+			population-=200;
+			ecoscore-=4;
+			Budget-=100;
 			setColor(7);
 			break;
 		}
@@ -483,9 +491,20 @@ public:
 				}
 			} while (ibullet != 0 && ibullet != 1);
 			bool bullet = ibullet;
+			if(bullet)
+			{
+			ecoscore+=2;
+			population+=100;
+		}
+			else
+			{
+			ecoscore-=2;
+			population-=100;
+		}
 			transports.push_back(new Train(name, plc, num, bullet));
 			setColor(10);
 			cout << "Train Added!" << endl;
+			Budget-=50;
 			setColor(7);
 			break;
 		}
@@ -503,9 +522,20 @@ public:
 				}
 			} while (ielec != 0 && ielec != 1);
 			bool elec = ielec;
+			if(elec)
+			{
+			ecoscore+=2;
+			population+=100;
+		}
+			else
+			{
+			ecoscore-=2;
+			population-=100;
+		}
 			transports.push_back(new Car(name, plc, owners, elec));
 			setColor(10);
 			cout << "Car Added!" << endl;
+			Budget-=50;
 			setColor(7);
 			break;
 		}
@@ -522,9 +552,21 @@ public:
 				}
 			} while (ielec != 0 && ielec != 1);
 			bool elec = ielec;
+			if(elec)
+			{
+			ecoscore+=2;
+			population+=100;
+		}
+			else
+			{
+			ecoscore-=2;
+			population-=100;
+		}
 			transports.push_back(new Bus(name, plc, lic, elec));
 			setColor(10);
 			cout << "Bus Added!" << endl;
+			Budget-=50;
+			
 			setColor(7);
 			break;
 		}
@@ -541,10 +583,23 @@ public:
 				}
 			} while (ielec != 0 && ielec != 1);
 			bool elec = ielec;
+			if(elec)
+			{
+			ecoscore+=2;
+			population+=100;
+		}
+			else
+			{
+			ecoscore-=2;
+			population-=100;
+		}
 			transports.push_back(new Bike(name, plc, lic, elec));
 			setColor(10);
 			cout << "Bike Added!" << endl;
+			
+			Budget-=50;
 			setColor(7);
+			
 			break;
 		}
 		default:
@@ -618,12 +673,16 @@ public:
 			}
 
 		
-			transports[choice - 1]->upgrade(); 
+			transports[choice - 1]->upgrade();
+			population+=500; 
+			ecoscore+=8;
+			Budget-=50;
 		}
 		
 		
 
 	}
+	
 	void UpgradeBuildings() {
 		if (buildings.empty()) {
 			cout << "Error: No buildings added yet!" << endl;
@@ -646,10 +705,89 @@ public:
 
 
 			buildings[choice - 1]->upgrade();
+		population+=500; 
+		ecoscore+=8;
+		Budget-=100;
 		}
+	
+	}
+	void Activity()
+	{
+		int choice;
+		
+		cout<<"What activity do you want to perform"<<endl;
+		cout<<"1.Cut trees  ";
+		cout<<"2.Install Solar Panels  ";
+		cout<<"3.Burn Trash Openly  ";
+		cout<<"4.Plant trees  ";
+		cout<<"5.Litter the city  ";
+		cout<<"6.Ban Plastic Bags  "<<endl;
+		cin>>choice;
+		switch(choice)
+		{
+			case 1:
+				population-=100;
+				ecoscore-=2;
+				cout<<"Activity performed successfully !!  "<<endl;
 
+				break;
+			case 2:
+				population+=100;
+				ecoscore+=2;
+				Budget-=50;
+				cout<<"Activity performed successfully !!  "<<endl;
 
+				break;
+			case 3:
+				population-=100;
+				ecoscore-=2;
+				cout<<"Activity performed successfully !!  "<<endl;
 
+				break;
+			case 4:
+				population+=100;
+				ecoscore+=2;
+				cout<<"Activity performed successfully !!  "<<endl;
+
+				break;
+			case 5:
+				population-=100;
+				ecoscore-=2;
+				cout<<"Activity performed successfully !!  "<<endl;
+
+				break;
+			case 6:
+				population+=100;
+				ecoscore-=2;
+				cout<<"Activity performed successfully !!  "<<endl;
+
+				break;
+			default:
+			setColor(12);
+			cout << "Error: Invalid Choice\n";
+			setColor(7);
+		}
+		
+	}
+	void ViewResults()
+	{
+	cout << "\n--- Final Results ---\n";
+	if ((population == 1000) && (ecoscore == 5)) 
+	{
+        cout << "Your city remained unchanged. Try doing more next time!\n";
+    } 
+    else if (population >= 1500 && ecoscore >= 10) 
+	{
+        cout << "Congratulations! You built a thriving and eco-friendly city!\n";
+    } 
+    else if (population < 800 || ecoscore < 5) 
+	{
+        cout << "Your city is struggling. Try focusing more on sustainability and growth.\n";
+    } 
+    else 
+	{
+        cout << "You made some progress! Keep improving your city's health and population.\n";
+    }
 	}
 	~City() {
 		for (auto b : buildings) delete b;
@@ -689,7 +827,9 @@ void menu(City& MyCity) {
 		cout << "   >> 3. Add Transport\n";
 		cout << "   >> 4. Upgrade Transport\n";
 		cout << "   >> 5. Upgrade Building\n";
-		cout << "   >> 6. Exit Simulation\n";
+		cout << "   >> 6. Perform Activity\n";
+		cout << "   >> 7. View Results\n";
+		cout << "   >> 8. Exit Simulation\n";
 		setColor(7);
 		cout << "Enter your choice: ";
 		try {
@@ -722,6 +862,13 @@ void menu(City& MyCity) {
 			MyCity.UpgradeBuildings();
 			break;
 		case 6:
+			MyCity.Activity();
+			break;
+		case 7:
+			
+			MyCity.ViewResults();
+			break;
+		case 8:
 			setColor(12);
 			cout << "\nExiting simulation...\n";
 			setColor(7);
@@ -732,7 +879,7 @@ void menu(City& MyCity) {
 			setColor(7);
 		}
 
-	} while (choice != 6);
+	} while (choice != 8);
 }
 
 int main() {
@@ -741,4 +888,3 @@ int main() {
 
 	return 0;
 }
-
